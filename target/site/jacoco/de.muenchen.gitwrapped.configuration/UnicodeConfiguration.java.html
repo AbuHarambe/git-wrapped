@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="de"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>UnicodeConfiguration.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">gitwrapped-backend</a> &gt; <a href="index.source.html" class="el_package">de.muenchen.gitwrapped.configuration</a> &gt; <span class="el_source">UnicodeConfiguration.java</span></div><h1>UnicodeConfiguration.java</h1><pre class="source lang-java linenums">package de.muenchen.gitwrapped.configuration;
+
+import de.muenchen.gitwrapped.configuration.nfcconverter.NfcRequestFilter;
+import org.apache.commons.lang3.ArrayUtils;
+import org.springframework.boot.web.servlet.FilterRegistrationBean;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.core.Ordered;
+
+/**
+ * &lt;p&gt;
+ * &lt;em&gt;Example&lt;/em&gt; of configuration of the NFC request filter
+ * &lt;/p&gt;
+ * &lt;ul&gt;
+ * &lt;li&gt;All requests that are sent to URIs under &lt;em&gt;/*&lt;/em&gt; are filtered.&lt;/li&gt;
+ * &lt;li&gt;Filter is contained in bean &lt;em&gt;nfcRequestFilter&lt;/em&gt;.&lt;/li&gt;
+ * &lt;li&gt;Only requests with Content-Types &lt;em&gt;text/plain&lt;/em&gt;; &lt;em&gt;application/json&lt;/em&gt;
+ * and &lt;em&gt;text/html&lt;/em&gt; are filtered.&lt;/li&gt;
+ * &lt;/ul&gt;
+ */
+@Configuration
+<span class="fc" id="L22">public class UnicodeConfiguration {</span>
+
+    private static final String NFC_FILTER_NAME = &quot;nfcRequestFilter&quot;;
+
+    private static final String NFC_WHITE_LIST = &quot;text/plain; application/json; application/hal+json; text/html&quot;;
+
+<span class="fc" id="L28">    private static final String[] NFC_URLS = ArrayUtils.toArray(&quot;/*&quot;);</span>
+
+    @Bean
+    public FilterRegistrationBean&lt;NfcRequestFilter&gt; nfcRequestFilterRegistration(final NfcRequestFilter nfcRequestFilter) {
+
+<span class="fc" id="L33">        final FilterRegistrationBean&lt;NfcRequestFilter&gt; registration = new FilterRegistrationBean&lt;&gt;();</span>
+<span class="fc" id="L34">        registration.setFilter(nfcRequestFilter);</span>
+<span class="fc" id="L35">        registration.setName(NFC_FILTER_NAME);</span>
+<span class="fc" id="L36">        registration.setOrder(Ordered.LOWEST_PRECEDENCE);</span>
+<span class="fc" id="L37">        registration.setAsyncSupported(false);</span>
+
+        // Set the URLs to which filters are to be applied.
+<span class="fc" id="L40">        registration.addUrlPatterns(NFC_URLS);</span>
+
+        // Setting the white list of ContentTypes
+<span class="fc" id="L43">        registration.addInitParameter(NfcRequestFilter.CONTENTTYPES_PROPERTY, NFC_WHITE_LIST);</span>
+
+<span class="fc" id="L45">        return registration;</span>
+
+    }
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.13.202504020838</span></div></body></html>

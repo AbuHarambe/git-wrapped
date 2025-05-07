@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="de"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>Authorities.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">gitwrapped-backend</a> &gt; <a href="index.source.html" class="el_package">de.muenchen.gitwrapped.security</a> &gt; <span class="el_source">Authorities.java</span></div><h1>Authorities.java</h1><pre class="source lang-java linenums">package de.muenchen.gitwrapped.security;
+
+import org.springframework.security.access.prepost.PreAuthorize;
+
+/**
+ * Each possible authority in this project is represented by a constant in this class.
+ * The constants are used within the {@link org.springframework.stereotype.Controller} or
+ * {@link org.springframework.stereotype.Service} classes in the method security annotations
+ * (e.g. {@link PreAuthorize}).
+ */
+@SuppressWarnings(&quot;PMD.DataClass&quot;)
+public final class Authorities {
+    public static final String THEENTITY_GET = &quot;hasAnyRole('reader', 'writer')&quot;;
+    public static final String THEENTITY_GET_ALL = &quot;hasAnyRole('reader', 'writer')&quot;;
+    public static final String THEENTITY_CREATE = &quot;hasAnyRole('writer')&quot;;
+    public static final String THEENTITY_UPDATE = &quot;hasAnyRole('writer')&quot;;
+    public static final String THEENTITY_DELETE = &quot;hasAnyRole('writer')&quot;;
+
+    // Permissions based auth
+    // public static final String THEENTITY_GET = &quot;hasAuthority('REFARCH_THEENTITY_READ')&quot;;
+    // public static final String THEENTITY_GET_ALL = &quot;hasAuthority('REFARCH_THEENTITY_READ')&quot;;
+    // public static final String THEENTITY_CREATE = &quot;hasAuthority('REFARCH_THEENTITY_WRITE')&quot;;
+    // public static final String THEENTITY_UPDATE = &quot;hasAuthority('REFARCH_THEENTITY_WRITE')&quot;;
+    // public static final String THEENTITY_DELETE = &quot;hasAuthority('REFARCH_THEENTITY_DELETE')&quot;;
+
+<span class="nc" id="L26">    private Authorities() {</span>
+<span class="nc" id="L27">        throw new UnsupportedOperationException(&quot;This is a utility class and cannot be instantiated&quot;);</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.13.202504020838</span></div></body></html>

@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="de"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>RequestResponseLoggingFilter.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">gitwrapped-backend</a> &gt; <a href="index.source.html" class="el_package">de.muenchen.gitwrapped.security</a> &gt; <span class="el_source">RequestResponseLoggingFilter.java</span></div><h1>RequestResponseLoggingFilter.java</h1><pre class="source lang-java linenums">package de.muenchen.gitwrapped.security;
+
+import de.muenchen.gitwrapped.configuration.SecurityProperties;
+import jakarta.servlet.Filter;
+import jakarta.servlet.FilterChain;
+import jakarta.servlet.FilterConfig;
+import jakarta.servlet.ServletException;
+import jakarta.servlet.ServletRequest;
+import jakarta.servlet.ServletResponse;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.util.Arrays;
+import java.util.List;
+import lombok.RequiredArgsConstructor;
+import lombok.ToString;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.context.annotation.Profile;
+import org.springframework.core.annotation.Order;
+import org.springframework.http.HttpMethod;
+import org.springframework.security.core.context.SecurityContext;
+import org.springframework.stereotype.Component;
+
+/**
+ * This filter logs the username for requests.
+ */
+@Component
+@Order(1)
+<span class="nc" id="L29">@Slf4j</span>
+@RequiredArgsConstructor
+@ToString
+@Profile(&quot;!no-security&quot;)
+public class RequestResponseLoggingFilter implements Filter {
+
+<span class="nc" id="L35">    private static final List&lt;String&gt; CHANGING_METHODS = Arrays.asList(HttpMethod.POST.name(), HttpMethod.PUT.name(), HttpMethod.PATCH.name(),</span>
+<span class="nc" id="L36">            HttpMethod.DELETE.name());</span>
+
+    /**
+     * The property or a zero length string if no property is available.
+     */
+    private final SecurityProperties securityProperties;
+
+    /**
+     * Logging mode to use for incoming HTTP requests
+     */
+<span class="nc" id="L46">    public enum LoggingMode {</span>
+        /**
+         * Logs all requests
+         */
+<span class="nc" id="L50">        ALL,</span>
+        /**
+         * Logs only changing requests, see {@link RequestResponseLoggingFilter#CHANGING_METHODS}
+         */
+<span class="nc" id="L54">        CHANGING,</span>
+        /**
+         * Logs no requests
+         */
+<span class="nc" id="L58">        NONE</span>
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void init(final FilterConfig filterConfig) {
+<span class="nc" id="L66">        log.debug(&quot;Initializing filter: {}&quot;, this);</span>
+<span class="nc" id="L67">    }</span>
+
+    /**
+     * The method logs the username extracted out of the {@link SecurityContext},
+     * the kind of HTTP-Request, the targeted URI and the response http status code.
+     * {@inheritDoc}
+     */
+    @Override
+    public void doFilter(final ServletRequest request, final ServletResponse response, final FilterChain chain)
+            throws IOException, ServletException {
+<span class="nc" id="L77">        chain.doFilter(request, response);</span>
+<span class="nc" id="L78">        final HttpServletRequest httpRequest = (HttpServletRequest) request;</span>
+<span class="nc" id="L79">        final HttpServletResponse httpResponse = (HttpServletResponse) response;</span>
+<span class="nc bnc" id="L80" title="All 2 branches missed.">        if (checkForLogging(httpRequest)) {</span>
+<span class="nc" id="L81">            log.info(&quot;User {} executed {} on URI {} with http status {}&quot;,</span>
+<span class="nc" id="L82">                    AuthUtils.getUsername(),</span>
+<span class="nc" id="L83">                    httpRequest.getMethod(),</span>
+<span class="nc" id="L84">                    httpRequest.getRequestURI(),</span>
+<span class="nc" id="L85">                    httpResponse.getStatus());</span>
+        }
+<span class="nc" id="L87">    }</span>
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void destroy() {
+<span class="nc" id="L94">        log.debug(&quot;Destructing filter: {}&quot;, this);</span>
+<span class="nc" id="L95">    }</span>
+
+    /**
+     * The method checks if logging the username should be done.
+     *
+     * @param httpServletRequest The request to check for logging.
+     * @return True if logging should be done otherwise false.
+     */
+    private boolean checkForLogging(final HttpServletRequest httpServletRequest) {
+<span class="nc bnc" id="L104" title="All 3 branches missed.">        final boolean isLoggingMode = switch (securityProperties.getLoggingMode()) {</span>
+<span class="nc" id="L105">        case LoggingMode.ALL -&gt; true;</span>
+<span class="nc" id="L106">        case LoggingMode.CHANGING -&gt; CHANGING_METHODS.contains(httpServletRequest.getMethod());</span>
+<span class="nc" id="L107">        default -&gt; false;</span>
+        };
+
+<span class="nc bnc" id="L110" title="All 4 branches missed.">        return isLoggingMode &amp;&amp; securityProperties.getLoggingIgnoreListAsMatchers().stream().noneMatch(matcher -&gt; matcher.matches(httpServletRequest));</span>
+    }
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.13.202504020838</span></div></body></html>

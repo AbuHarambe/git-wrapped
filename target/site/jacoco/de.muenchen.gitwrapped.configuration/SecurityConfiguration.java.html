@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="de"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>SecurityConfiguration.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">gitwrapped-backend</a> &gt; <a href="index.source.html" class="el_package">de.muenchen.gitwrapped.configuration</a> &gt; <span class="el_source">SecurityConfiguration.java</span></div><h1>SecurityConfiguration.java</h1><pre class="source lang-java linenums">package de.muenchen.gitwrapped.configuration;
+
+import lombok.RequiredArgsConstructor;
+import org.springframework.boot.autoconfigure.web.client.RestTemplateAutoConfiguration;
+import org.springframework.boot.web.client.RestTemplateBuilder;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Import;
+import org.springframework.context.annotation.Profile;
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
+import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
+
+/**
+ * The central class for configuration of all security aspects.
+ * Automatically used when not running with profile `no-security`.
+ * Configures all endpoints to require authentication via access token.
+ * (except the Spring Boot Actuator endpoints)
+ * Additionally it configures the use of the {@link UserInfoAuthoritiesService}.
+ */
+@RequiredArgsConstructor
+@Configuration
+@Profile(&quot;!no-security&quot;)
+@EnableWebSecurity
+@EnableMethodSecurity(securedEnabled = true)
+@Import(RestTemplateAutoConfiguration.class)
+public class SecurityConfiguration {
+
+    private final RestTemplateBuilder restTemplateBuilder;
+
+    private final SecurityProperties securityProperties;
+
+    @Bean
+    public SecurityFilterChain filterChain(final HttpSecurity http) throws Exception {
+<span class="nc" id="L37">        http</span>
+<span class="nc" id="L38">                .authorizeHttpRequests((requests) -&gt; requests.requestMatchers(</span>
+                        // allow access to /actuator/info
+<span class="nc" id="L40">                        AntPathRequestMatcher.antMatcher(&quot;/actuator/info&quot;),</span>
+                        // allow access to /actuator/health for OpenShift Health Check
+<span class="nc" id="L42">                        AntPathRequestMatcher.antMatcher(&quot;/actuator/health&quot;),</span>
+                        // allow access to /actuator/health/liveness for OpenShift Liveness Check
+<span class="nc" id="L44">                        AntPathRequestMatcher.antMatcher(&quot;/actuator/health/liveness&quot;),</span>
+                        // allow access to /actuator/health/readiness for OpenShift Readiness Check
+<span class="nc" id="L46">                        AntPathRequestMatcher.antMatcher(&quot;/actuator/health/readiness&quot;),</span>
+                        // allow access to /actuator/metrics for Prometheus monitoring in OpenShift
+<span class="nc" id="L48">                        AntPathRequestMatcher.antMatcher(&quot;/actuator/metrics&quot;))</span>
+<span class="nc" id="L49">                        .permitAll())</span>
+<span class="nc" id="L50">                .authorizeHttpRequests((requests) -&gt; requests.requestMatchers(&quot;/**&quot;)</span>
+<span class="nc" id="L51">                        .authenticated())</span>
+<span class="nc" id="L52">                .oauth2ResourceServer(httpSecurityOAuth2ResourceServerConfigurer -&gt; httpSecurityOAuth2ResourceServerConfigurer</span>
+<span class="nc" id="L53">                        .jwt(jwtConfigurer -&gt; jwtConfigurer.jwtAuthenticationConverter(new JwtUserInfoAuthenticationConverter(</span>
+<span class="nc" id="L54">                                new UserInfoAuthoritiesService(securityProperties.getUserInfoUri(), restTemplateBuilder)))));</span>
+
+<span class="nc" id="L56">        return http.build();</span>
+    }
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.13.202504020838</span></div></body></html>
