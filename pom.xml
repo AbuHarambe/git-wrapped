@@ -19,7 +19,7 @@
     <repositories>
         <repository>
             <id>central</id>
-            <url>https://artifactory.muenchen.de/artifactory/mvn-repos</url>
+            <url>https://repo.maven.apache.org/maven2</url>
             <snapshots>
                 <enabled>false</enabled>
             </snapshots>
@@ -29,7 +29,7 @@
     <pluginRepositories>
         <pluginRepository>
             <id>central</id>
-            <url>https://artifactory.muenchen.de/artifactory/mvn-repos</url>
+            <url>https://repo.maven.apache.org/maven2</url>
             <snapshots>
                 <enabled>false</enabled>
             </snapshots>
@@ -400,6 +400,7 @@
                     <rulesets>
                         <ruleset>refarch-pmd-ruleset.xml</ruleset>
                     </rulesets>
+                    <skip>${pmd.skip}</skip>
                 </configuration>
                 <executions>
                     <execution>

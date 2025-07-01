@@ -52,5 +52,5 @@ info:
     version: 0.0.1-SNAPSHOT
     description: This is an Annual Review app for Git Users
   build:
-    java.version: 21.0.5
+    java.version: 21.0.7
     spring-cloud.version: 2024.0.1

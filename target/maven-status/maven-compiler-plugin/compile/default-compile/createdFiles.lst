@@ -26,5 +26,6 @@ de\muenchen\gitwrapped\theentity\TheEntityService.class
 de\muenchen\gitwrapped\theentity\dto\TheEntityRequestDTO.class
 de\muenchen\gitwrapped\configuration\UserInfoAuthoritiesService.class
 de\muenchen\gitwrapped\theentity\dto\TheEntityMapper.class
+de\muenchen\gitwrapped\api\github\ApiRequests.class
 de\muenchen\gitwrapped\configuration\nfcconverter\NfcHelper.class
 de\muenchen\gitwrapped\security\Authorities.class

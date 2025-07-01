@@ -17,24 +17,24 @@ public final class ApiRequests {
         final String user = "AbuHarambe";
         final String url = "https://api.github.com/users/" + user;
 
-        final HttpClient client = HttpClient.newHttpClient();
-        final HttpRequest request = HttpRequest.newBuilder()
-                .uri(URI.create(url))
-                .header("Accept", "application/json")
-                .GET()
-                .build();
+        try (HttpClient client = HttpClient.newHttpClient()) {
+            // nutze client}
 
-        System.out.println(url);
+            final HttpRequest request = HttpRequest.newBuilder()
+                    .uri(URI.create(url))
+                    .header("Accept", "application/json")
+                    .GET()
+                    .build();
 
-        try {
-            final HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
-            System.out.println(response.statusCode());
-            System.out.println(response.body());
-        } catch (IOException e) {
-            System.err.println("Fehler bei der API-Anfrage:" + e.getMessage());
-        } catch (InterruptedException e) {
-            System.err.println("Die API-Anfrage wurde abgebrochen:" + e.getMessage());
-            Thread.currentThread().interrupt();
+            try {
+                final HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+
+            } catch (IOException e) {
+                System.err.println("Fehler bei der API-Anfrage:" + e.getMessage());
+            } catch (InterruptedException e) {
+                System.err.println("Die API-Anfrage wurde abgebrochen:" + e.getMessage());
+                Thread.currentThread().interrupt();
+            }
         }
     }
 }
