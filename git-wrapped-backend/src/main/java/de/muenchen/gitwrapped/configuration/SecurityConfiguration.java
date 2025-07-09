@@ -35,25 +35,18 @@ public class SecurityConfiguration {
     @Bean
     public SecurityFilterChain filterChain(final HttpSecurity http) throws Exception {
         http
-                .authorizeHttpRequests((requests) -> requests.requestMatchers(
-                        // allow access to /actuator/info
-                        AntPathRequestMatcher.antMatcher("/actuator/info"),
-                        // allow access to /actuator/health for OpenShift Health Check
-                        AntPathRequestMatcher.antMatcher("/actuator/health"),
-                        // allow access to /actuator/health/liveness for OpenShift Liveness Check
-                        AntPathRequestMatcher.antMatcher("/actuator/health/liveness"),
-                        // allow access to /actuator/health/readiness for OpenShift Readiness Check
-                        AntPathRequestMatcher.antMatcher("/actuator/health/readiness"),
-                        // allow access to /actuator/metrics for Prometheus monitoring in OpenShift
-                        AntPathRequestMatcher.antMatcher("/actuator/metrics"))
-                        .permitAll())
-                .authorizeHttpRequests((requests) -> requests.requestMatchers("/**")
-                        .authenticated())
-                .oauth2ResourceServer(httpSecurityOAuth2ResourceServerConfigurer -> httpSecurityOAuth2ResourceServerConfigurer
-                        .jwt(jwtConfigurer -> jwtConfigurer.jwtAuthenticationConverter(new JwtUserInfoAuthenticationConverter(
-                                new UserInfoAuthoritiesService(securityProperties.getUserInfoUri(), restTemplateBuilder)))));
+                .authorizeHttpRequests((requests) -> requests
+                        .requestMatchers(
+                                AntPathRequestMatcher.antMatcher("/actuator/info"),
+                                AntPathRequestMatcher.antMatcher("/actuator/health"),
+                                AntPathRequestMatcher.antMatcher("/actuator/health/liveness"),
+                                AntPathRequestMatcher.antMatcher("/actuator/health/readiness"),
+                                AntPathRequestMatcher.antMatcher("/actuator/metrics"))
+                        .permitAll()
+                        .requestMatchers("/login**", "/oauth2/**").permitAll() // <-- neu: Login & Redirects
+                        .anyRequest().authenticated())
+                .oauth2Login(); // <-- neu: GitHub Login aktivieren
 
         return http.build();
     }
-
 }

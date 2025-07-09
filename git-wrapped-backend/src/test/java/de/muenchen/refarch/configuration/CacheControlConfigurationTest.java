@@ -1,7 +1,5 @@
 package de.muenchen.gitwrapped.configuration;
 
-import static de.muenchen.gitwrapped.TestConstants.SPRING_NO_SECURITY_PROFILE;
-import static de.muenchen.gitwrapped.TestConstants.SPRING_TEST_PROFILE;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -16,7 +14,6 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.test.context.ActiveProfiles;
 import org.testcontainers.containers.PostgreSQLContainer;
 import org.testcontainers.junit.jupiter.Container;
 import org.testcontainers.junit.jupiter.Testcontainers;
@@ -27,7 +24,7 @@ import org.testcontainers.utility.DockerImageName;
         classes = { GitWrappedBackendApplication.class },
         webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT
 )
-@ActiveProfiles(profiles = { SPRING_TEST_PROFILE, SPRING_NO_SECURITY_PROFILE })
+//@ActiveProfiles(profiles = { SPRING_TEST_PROFILE, SPRING_NO_SECURITY_PROFILE })
 class CacheControlConfigurationTest {
 
     @Container
