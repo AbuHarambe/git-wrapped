@@ -1,5 +1,5 @@
 {
-  "name": "refarch-frontend",
+  "name": "gitwrapped-frontend",
   "version": "0.0.0",
   "type": "module",
   "private": true,
@@ -19,6 +19,7 @@
     "@fontsource/roboto": "5.2.6",
     "@muenchen/appswitcher-vue": "2.2.0",
     "@vueuse/core": "13.5.0",
+    "axios": "^1.10.0",
     "pinia": "3.0.3",
     "vue": "3.5.17",
     "vue-i18n": "11.1.7",
@@ -32,6 +33,7 @@
     "@mdi/js": "7.4.47",
     "@muenchen/prettier-codeformat": "1.0.2",
     "@tsconfig/node-lts": "22.0.2",
+    "@types/axios": "^0.9.36",
     "@types/node": "22.14.0",
     "@vitejs/plugin-vue": "6.0.0",
     "@vue/eslint-config-prettier": "10.2.0",

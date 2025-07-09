@@ -7,6 +7,7 @@ import org.springframework.http.*;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
+
 @Service
 public class GitHubUserClient {
 
@@ -20,22 +21,23 @@ public class GitHubUserClient {
      * @param accessToken OAuth access token
      * @return JSON response as String or null if failed
      */
+
     public String fetchUserInfo(final String username, final String accessToken) {
         final RestTemplate restTemplate = new RestTemplate();
         final HttpHeaders headers = new HttpHeaders();
         headers.setBearerAuth(accessToken);
         headers.setAccept(List.of(MediaType.APPLICATION_JSON));
-        final HttpEntity<String> entity = new HttpEntity<>(headers);
 
-        String url = GITHUB_USERS_URL + username;
+        final HttpEntity<String> entity = new HttpEntity<>(headers);
+        final String url = GITHUB_USERS_URL + username;
 
         try {
-            ResponseEntity<String> response = restTemplate.exchange(
+            final ResponseEntity<String> response = restTemplate.exchange(
                     url,
                     HttpMethod.GET,
                     entity,
-                    String.class);
-
+                    String.class
+            );
             return response.getBody();
         } catch (Exception e) {
             LOG.error("Fehler beim Aufruf der GitHub API für Benutzer '{}': {}", username, e.getMessage());

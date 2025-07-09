@@ -45,7 +45,9 @@ public class SecurityConfiguration {
                         .permitAll()
                         .requestMatchers("/login**", "/oauth2/**").permitAll() // <-- neu: Login & Redirects
                         .anyRequest().authenticated())
-                .oauth2Login(); // <-- neu: GitHub Login aktivieren
+                .oauth2Login(oauth2 -> oauth2
+                        .defaultSuccessUrl("http://localhost:8081", true)
+                );
 
         return http.build();
     }
